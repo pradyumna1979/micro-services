@@ -1,0 +1,39 @@
+server:
+  port: 0
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8061/eureka/
+management:
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://zipkin:9411/api/v2/spans
+logging:
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%X{traceId:-},%X{spanId:-}] ${LOG_LEVEL_PATTERN:-%5p} %m%n"
+springdoc:
+  packagesToScan: com.pradyumna.cloud
+spring:
+  output:
+    ansi:
+      enabled: always
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/micro_service
+    username: root
+    password: Root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa :
+    generate-ddl: true
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true

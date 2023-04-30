@@ -1,0 +1,14 @@
+Gateway URI :
+http://localhost:8060
+Organization:
+    localhost:8060/organization/
+department:
+    localhost:8060/department/
+employee:
+    localhost:8060/employee/
+Swagger:
+    http://localhost:8060/swagger-ui.html
+Zipkin:
+    http://localhost:9411/zipkin/
+Eureka Server:
+    http://localhost:8061/
