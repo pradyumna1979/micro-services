@@ -4,6 +4,7 @@ import com.pradyumna.cloud.client.DepartmentClient;
 import com.pradyumna.cloud.client.EmployeeClient;
 import com.pradyumna.cloud.dto.OrganizationDTO;
 import com.pradyumna.cloud.entity.Organization;
+import com.pradyumna.cloud.exception.OrganizationNotFoundException;
 import com.pradyumna.cloud.service.OrganizationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,9 +46,9 @@ public class OrganizationController {
     }
 
     @GetMapping("/{id}")
-    public OrganizationDTO findById(@PathVariable("id") Long id) throws Exception {
+    public OrganizationDTO findById(@PathVariable("id") Long id) throws OrganizationNotFoundException {
         LOGGER.info("Organization find: id={}", id);
-        Organization organization= organizationService.findById(id).orElseThrow(() -> new Exception("Organization Not found for : "+id));
+        Organization organization= organizationService.findById(id).orElseThrow(() -> new OrganizationNotFoundException("Organization Not found for : "+id));
         return  OrganizationDTO.builder()
                 .id(organization.getId())
                 .name(organization.getName())
@@ -56,9 +57,9 @@ public class OrganizationController {
     }
 
     @GetMapping("/{id}/with-departments")
-    public OrganizationDTO findByIdWithDepartments(@PathVariable("id") Long id) throws Exception {
+    public OrganizationDTO findByIdWithDepartments(@PathVariable("id") Long id) throws OrganizationNotFoundException {
         LOGGER.info("Organization find: id={}", id);
-        Organization organization = organizationService.findById(id).orElseThrow(() -> new Exception("Organisation not found for : "+id));
+        Organization organization = organizationService.findById(id).orElseThrow(() -> new OrganizationNotFoundException("Organisation not found for : "+id));
         return   OrganizationDTO.builder()
                 .id(organization.getId())
                 .name(organization.getName())
@@ -68,9 +69,9 @@ public class OrganizationController {
     }
 
     @GetMapping("/{id}/with-departments-and-employees")
-    public OrganizationDTO findByIdWithDepartmentsAndEmployees(@PathVariable("id") Long id) throws Exception {
+    public OrganizationDTO findByIdWithDepartmentsAndEmployees(@PathVariable("id") Long id) throws OrganizationNotFoundException {
         LOGGER.info("Organization find: id={}", id);
-        Organization organization = organizationService.findById(id).orElseThrow(()->new Exception("Organization not found for : "+id));
+        Organization organization = organizationService.findById(id).orElseThrow(()->new OrganizationNotFoundException("Organization not found for : "+id));
         return   OrganizationDTO.builder()
                 .id(organization.getId())
                 .name(organization.getName())
@@ -80,9 +81,9 @@ public class OrganizationController {
     }
 
     @GetMapping("/{id}/with-employees")
-    public OrganizationDTO findByIdWithEmployees(@PathVariable("id") Long id) throws Exception {
+    public OrganizationDTO findByIdWithEmployees(@PathVariable("id") Long id) throws OrganizationNotFoundException {
         LOGGER.info("Organization find: id={}", id);
-        Organization organization = organizationService.findById(id).orElseThrow(() -> new Exception("Organization not found for : "+id));
+        Organization organization = organizationService.findById(id).orElseThrow(() -> new OrganizationNotFoundException("Organization not found for : "+id));
         return   OrganizationDTO.builder()
                 .id(organization.getId())
                 .name(organization.getName())

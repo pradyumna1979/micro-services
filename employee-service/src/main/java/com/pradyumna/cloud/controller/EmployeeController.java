@@ -2,6 +2,7 @@ package com.pradyumna.cloud.controller;
 
 import com.pradyumna.cloud.dto.EmployeeDTO;
 import com.pradyumna.cloud.entity.Employee;
+import com.pradyumna.cloud.exception.EmployeeNotFoundException;
 import com.pradyumna.cloud.service.EmployeeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,9 +26,9 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Employee> findById(@PathVariable("id") Long id) {
+    public Employee findById(@PathVariable("id") Long id) throws EmployeeNotFoundException {
         LOGGER.info("Employee find: id={}", id);
-        return employeeService.findById(id);
+        return employeeService.findById(id).orElseThrow(()->new EmployeeNotFoundException("Employee not found "+id));
     }
 
     @GetMapping("/")

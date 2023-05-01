@@ -3,6 +3,7 @@ package com.pradyumna.cloud.controller;
 import com.pradyumna.cloud.client.EmployeeClient;
 import com.pradyumna.cloud.dto.DepartmentDTO;
 import com.pradyumna.cloud.entity.Department;
+import com.pradyumna.cloud.exception.DepartmentNotFoundException;
 import com.pradyumna.cloud.service.DepartmentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,9 +30,9 @@ public class DepartmentController {
     }
 
     @GetMapping("/{id}")
-    public Department findById(@PathVariable("id") Long id) throws Exception {
+    public Department findById(@PathVariable("id") Long id) throws DepartmentNotFoundException {
         LOGGER.info("Department find: id={}", id);
-        return departmentService.findById(id).orElseThrow(() -> new Exception("Department not found : "+id));
+        return departmentService.findById(id).orElseThrow(() -> new DepartmentNotFoundException("Department not found : "+id));
     }
 
     @GetMapping("/")
