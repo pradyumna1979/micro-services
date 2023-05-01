@@ -1,6 +1,9 @@
 package com.pradyumna.cloud.entity;
 
+import com.pradyumna.cloud.dto.DepartmentDTO;
+import com.pradyumna.cloud.dto.OrganizationDTO;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,10 +22,8 @@ public class Employee implements Serializable {
     private String name;
     private int age;
     private String position;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "org_id", nullable = false)
-    private Organization organization;
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(name = "dept_id", nullable = false)
-    private Department department;
+    @NotNull
+    private Long orgId;
+    @NotNull
+    private Long deptId;
 }
