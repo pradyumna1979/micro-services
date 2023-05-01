@@ -12,5 +12,4 @@ public interface DepartmentClient {
     Set<DepartmentDTO> findByOrganizationWithEmployees(@PathVariable("organizationId") Long organizationId);
     @GetMapping("/organization/{organizationId}")
     public Set<DepartmentDTO> findByOrganizationId(@PathVariable("organizationId") Long  organizationId);
-
 }

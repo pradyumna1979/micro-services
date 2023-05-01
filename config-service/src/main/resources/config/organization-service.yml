@@ -40,3 +40,6 @@ management:
   zipkin:
     tracing:
       endpoint: http://zipkin:9411/api/v2/spans
+feign:
+  circuitbreaker:
+    enabled: true
