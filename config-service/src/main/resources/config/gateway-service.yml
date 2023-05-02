@@ -25,6 +25,12 @@ spring:
           predicates:
             - Path=/employee/**
           filters:
+            - name: CircuitBreaker
+              args:
+                name: employee
+                fallbackUri: forward:/fallback/employee
+                statusCodes:
+                 - 500
             - RewritePath=/employee/(?<path>.*), /$\{path}
         - id: department-service
           uri: lb://department-service
@@ -32,18 +38,78 @@ spring:
             - Path=/department/**
           filters:
             - RewritePath=/department/(?<path>.*), /$\{path}
+            - name: CircuitBreaker
+              args:
+                name: department
+                fallbackUri: forward:/fallback/department
+                statusCodes:
+                 - 500
         - id: organization-service
           uri: lb://organization-service
           predicates:
             - Path=/organization/**
           filters:
             - RewritePath=/organization/(?<path>.*), /$\{path}
+            - name: CircuitBreaker
+              args:
+                name: organization
+                fallbackUri: forward:/fallback/organization
+                statusCodes:
+                 - 500
         - id: openapi
           uri: http://localhost:${server.port}
           predicates:
             - Path=/v3/api-docs/**
           filters:
             - RewritePath=/v3/api-docs/(?<path>.*), /$\{path}/v3/api-docs
+resilience4j.circuitbreaker:
+  configs:
+    default:
+      slidingWindowSize: 10
+      minimumNumberOfCalls: 5
+      permittedNumberOfCallsInHalfOpenState: 3
+      automaticTransitionFromOpenToHalfOpenEnabled: true
+      waitDurationInOpenState: 2s
+      failureRateThreshold: 5
+      eventConsumerBufferSize: 10
+      slowCallDurationThreshold: 200ms
+      slowCallRateThreshold: 30
+      recordExceptions:
+        - org.springframework.web.client.HttpServerErrorException
+        - java.io.IOException
+      ignoreExceptions:
+        - java.lang.IllegalStateException
+    shared:
+      slidingWindowSize: 100
+      permittedNumberOfCallsInHalfOpenState: 30
+      waitDurationInOpenState: 1s
+      failureRateThreshold: 50
+      eventConsumerBufferSize: 10
+      ignoreExceptions:
+        - java.lang.IllegalStateException
+  instances:
+    department:
+      baseConfig: default
+    employee:
+      baseConfig: default
+    organization:
+      slidingWindowSize: 10
+      minimumNumberOfCalls: 10
+      permittedNumberOfCallsInHalfOpenState: 3
+      waitDurationInOpenState: 1s
+      failureRateThreshold: 50
+      eventConsumerBufferSize: 10
+      recordFailurePredicate: com.pradyumna.cloud.predicate.HttpInternalServicePredicate
+
+resilience4j.timelimiter:
+  time-limiter-aspect-order: 398
+  configs:
+    default:
+      timeoutDuration: 1s
+      cancelRunningFuture: false
+  instances:
+    employee:
+      timeoutDuration: 250ms
 
 springdoc:
   swagger-ui:
@@ -60,4 +126,8 @@ management:
     sampling:
       probability: 1.0
   endpoints:
-    enabled-by-default: true
+    web:
+      exposure:
+        include: gateway
+
+level.io.github.resilience4j: DEBUG

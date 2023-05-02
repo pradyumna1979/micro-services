@@ -1,8 +1,8 @@
-package com.pradyumna.cloud.entity;
+package com.pradyumna.cloud.dto;
 
-import com.pradyumna.cloud.dto.DepartmentDTO;
-import com.pradyumna.cloud.dto.EmployeeDTO;
+import com.pradyumna.cloud.entity.Employee;
 import jakarta.persistence.*;
+import jakarta.xml.bind.annotation.XmlRootElement;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,17 +12,15 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Organization implements Serializable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "org_id")
+@XmlRootElement(name = "organization")
+public class OrganizationDTO implements Serializable {
     private Long id;
     private String name;
     private String address;
-
+    private Set<DepartmentDTO> departmentDTOS = new HashSet<>();
+    private Set<Employee> employees = new HashSet<>();
 }

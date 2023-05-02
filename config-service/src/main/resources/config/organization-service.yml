@@ -21,11 +21,11 @@ spring:
     serialization:
       FAIL_ON_EMPTY_BEANS: false
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/micro_service
-    username: root
+    url: jdbc:postgresql://localhost:5432/MICROSERVICE_ORGANIZATION
+    username: postgres
     password: Root
-    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
+    database: POSTGRESQL
     show-sql: true
     hibernate:
       ddl-auto: update
