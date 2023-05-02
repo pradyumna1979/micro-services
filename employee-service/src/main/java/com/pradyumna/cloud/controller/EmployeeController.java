@@ -1,6 +1,8 @@
 package com.pradyumna.cloud.controller;
 
+import com.pradyumna.cloud.dto.EmployeeDTO;
 import com.pradyumna.cloud.entity.Employee;
+import com.pradyumna.cloud.exception.EmployeeNotFoundException;
 import com.pradyumna.cloud.service.EmployeeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,9 +26,9 @@ public class EmployeeController {
     }
 
     @GetMapping("/{id}")
-    public Optional<Employee> findById(@PathVariable("id") Long id) {
+    public Employee findById(@PathVariable("id") Long id) throws EmployeeNotFoundException {
         LOGGER.info("Employee find: id={}", id);
-        return employeeService.findById(id);
+        return employeeService.findById(id).orElseThrow(()->new EmployeeNotFoundException("Employee not found "+id));
     }
 
     @GetMapping("/")
@@ -36,13 +38,13 @@ public class EmployeeController {
     }
 
     @GetMapping("/department/{departmentId}")
-    public List<Employee> findByDepartmentId(@PathVariable("departmentId") Long departmentId) {
+    public List<EmployeeDTO> findByDepartmentId(@PathVariable("departmentId") Long departmentId) {
         LOGGER.info("Employee find: departmentId={}", departmentId);
         return employeeService.findByDepartmentId(departmentId);
     }
 
     @GetMapping("/organization/{organizationId}")
-    public List<Employee> findByOrganizationId(@PathVariable("organizationId") Long organizationId) {
+    public List<EmployeeDTO> findByOrganizationId(@PathVariable("organizationId") Long organizationId) {
         LOGGER.info("Employee find: organizationId={}", organizationId);
         return employeeService.findByOrganizationId(organizationId);
     }

@@ -25,7 +25,7 @@ spring:
       FAIL_ON_EMPTY_BEANS: false
 
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/micro_service
+    url: jdbc:mysql://127.0.0.1:3306/microservice_employee
     username: root
     password: Root
     driver-class-name: com.mysql.cj.jdbc.Driver

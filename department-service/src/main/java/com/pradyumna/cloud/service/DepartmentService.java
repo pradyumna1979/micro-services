@@ -1,5 +1,6 @@
 package com.pradyumna.cloud.service;
 
+import com.pradyumna.cloud.dto.DepartmentDTO;
 import com.pradyumna.cloud.entity.Department;
 import com.pradyumna.cloud.repository.DepartmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
 @Service
 public class DepartmentService {
     DepartmentRepository departmentRepository;
@@ -27,7 +30,15 @@ public class DepartmentService {
         return departmentRepository.findAll();
     }
 
-    public List<Department> findByOrganization(Long organizationId) {
-        return departmentRepository.findByOrganizationId(organizationId);
+    public List<DepartmentDTO> findByOrganization(Long organizationId) {
+        return departmentRepository.findByOrgId(organizationId)
+                .stream()
+                .map(department -> {
+                    DepartmentDTO departmentDTO = new DepartmentDTO();
+                    departmentDTO.setId(department.getId());
+                    departmentDTO.setName(department.getName());
+                    departmentDTO.setOrgId(department.getOrgId());
+                    return departmentDTO;
+                }).collect(Collectors.toList());
     }
 }

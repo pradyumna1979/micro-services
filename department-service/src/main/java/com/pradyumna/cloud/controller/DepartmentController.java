@@ -1,7 +1,9 @@
 package com.pradyumna.cloud.controller;
 
 import com.pradyumna.cloud.client.EmployeeClient;
+import com.pradyumna.cloud.dto.DepartmentDTO;
 import com.pradyumna.cloud.entity.Department;
+import com.pradyumna.cloud.exception.DepartmentNotFoundException;
 import com.pradyumna.cloud.service.DepartmentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.*;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class DepartmentController {
@@ -27,9 +30,9 @@ public class DepartmentController {
     }
 
     @GetMapping("/{id}")
-    public Department findById(@PathVariable("id") Long id) throws Exception {
+    public Department findById(@PathVariable("id") Long id) throws DepartmentNotFoundException {
         LOGGER.info("Department find: id={}", id);
-        return departmentService.findById(id).orElseThrow(() -> new Exception("Department not found : "+id));
+        return departmentService.findById(id).orElseThrow(() -> new DepartmentNotFoundException("Department not found : "+id));
     }
 
     @GetMapping("/")
@@ -39,16 +42,17 @@ public class DepartmentController {
     }
 
     @GetMapping("/organization/{organizationId}")
-    public List<Department> findByOrganization(@PathVariable("organizationId") Long organizationId) {
+    public List<DepartmentDTO> findByOrganization(@PathVariable("organizationId") Long organizationId) {
         LOGGER.info("Department find: organizationId={}", organizationId);
         return departmentService.findByOrganization(organizationId);
     }
 
     @GetMapping("/organization/{organizationId}/with-employees")
-    public List<Department> findByOrganizationWithEmployees(@PathVariable("organizationId") Long organizationId) {
+    public List<DepartmentDTO> findByOrganizationWithEmployees(@PathVariable("organizationId") Long organizationId) {
         LOGGER.info("Department find: organizationId={}", organizationId);
-        List<Department> departments = departmentService.findByOrganization(organizationId);
-        departments.forEach(d -> d.setEmployees(employeeClient.findByDepartment(d.getId())));
-        return departments;
+        List<DepartmentDTO> departments = departmentService.findByOrganization(organizationId);
+        return departments.stream()
+                .peek(departmentDTO -> departmentDTO.setEmployeeDTOS(employeeClient.findByDepartmentId(departmentDTO.getId())))
+                .collect(Collectors.toList());
     }
 }

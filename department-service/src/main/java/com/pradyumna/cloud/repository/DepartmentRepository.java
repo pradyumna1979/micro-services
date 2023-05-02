@@ -8,8 +8,5 @@ import java.util.List;
 
 @Repository
 public interface DepartmentRepository extends JpaRepository<Department,Long> {
-    List<Department> findByOrganization(Long organizationId);
-
-
-    List<Department> findByOrganizationId(Long organizationId);
+    List<Department> findByOrgId(Long orgId);
 }
