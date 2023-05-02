@@ -122,12 +122,18 @@ springdoc:
         url: /v3/api-docs/organization
 
 management:
-  tracing:
-    sampling:
-      probability: 1.0
+  endpoint:
+    gateway:
+      enabled: true
   endpoints:
     web:
       exposure:
         include: gateway
+  tracing:
+    sampling:
+      probability: 1.0
+  zipkin:
+    tracing:
+      endpoint: http://localhost:9411/api/v2/spans
 
 level.io.github.resilience4j: DEBUG

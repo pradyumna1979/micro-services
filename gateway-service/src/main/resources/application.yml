@@ -3,10 +3,5 @@ spring:
     name: gateway-service
   config:
     import: "optional:configserver:http://localhost:8088"
-
----
-spring:
-  config:
-    import: "optional:configserver:http://config-service:8088"
-    activate:
-      on-profile: docker
+  main:
+    web-application-type: reactive
