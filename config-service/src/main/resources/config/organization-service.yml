@@ -5,7 +5,8 @@ eureka:
   client:
     serviceUrl:
       defaultZone: http://localhost:8061/eureka/
-
+  instance:
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
 logging:
   pattern:
     console: "%d{yyyy-MM-dd HH:mm:ss} [%X{traceId:-},%X{spanId:-}] ${LOG_LEVEL_PATTERN:-%5p} %m%n"
